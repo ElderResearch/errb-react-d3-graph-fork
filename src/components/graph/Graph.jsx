@@ -492,6 +492,10 @@ export default class Graph extends React.Component {
         this.isDraggingNode = false;
         this.state = initializeGraphState(this.props, this.state);
     }
+    
+    componentWillReceiveProps(nextProps) {
+        this.UNSAFE_componentWillReceiveProps(nextProps);
+    }
 
     /**
      * @deprecated

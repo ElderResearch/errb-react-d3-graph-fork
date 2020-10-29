@@ -1,6 +1,9 @@
 {
-  "name": "react-d3-graph",
+  "name": "@elderresearch/errb-react-d3-graph",
   "version": "2.4.1",
+  "publishConfig": {
+    "registry":"https://elderresearch.jfrog.io/artifactory/api/npm/npm/"
+  },
   "description": "React component to build interactive and configurable graphs with d3 effortlessly",
   "author": "Daniel Caldas",
   "license": "MIT",
