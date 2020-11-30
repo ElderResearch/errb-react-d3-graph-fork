@@ -1,4 +1,4 @@
-module.exports = {
+export const data = {
     links: [
         { source: "Napoleon", target: "Myriel", value: 1 },
         { source: "Mlle.Baptistine", target: "Myriel", value: 8 },

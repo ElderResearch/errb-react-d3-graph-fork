@@ -1,7 +1,15 @@
 import React from "react";
 
 import { drag as d3Drag } from "d3-drag";
-import { forceLink as d3ForceLink } from "d3-force";
+import {
+    forceLink as d3ForceLink,
+    forceX as d3ForceX,
+    forceY as d3ForceY,
+    forceSimulation as d3ForceSimulation,
+    forceManyBody as d3ForceManyBody,
+    forceCollide as d3ForceCollide,
+    forceCenter as d3ForceCenter,
+} from "d3-force";
 import { select as d3Select, selectAll as d3SelectAll, event as d3Event } from "d3-selection";
 import { zoom as d3Zoom } from "d3-zoom";
 
@@ -117,6 +125,7 @@ import { merge, throwErr } from "../../utils";
  *      onMouseOverLink={onMouseOverLink}
  *      onMouseOutLink={onMouseOutLink}/>
  */
+
 export default class Graph extends React.Component {
     /**
      * Obtain a set of properties which will be used to perform the focus and zoom animation if
@@ -153,12 +162,24 @@ export default class Graph extends React.Component {
      * @returns {undefined}
      */
     _graphLinkForceConfig() {
-        const forceLink = d3ForceLink(this.state.d3Links)
-            .id(l => l.id)
-            .distance(this.state.config.d3.linkLength)
-            .strength(this.state.config.d3.linkStrength);
+        console.log("force configgin'");
+        console.log(this.state.d3Links);
+        const forceLink = d3ForceLink().id(l => l.id);
+        //            .distance(200);
 
-        this.state.simulation.force(CONST.LINK_CLASS_NAME, forceLink);
+        //        console.log(forceLink.strength());
+
+        const frx = d3ForceX(800 / 2).strength(CONST.FORCE_X);
+        const fry = d3ForceY(400 / 2).strength(CONST.FORCE_Y);
+
+        console.log(this.state.simulation.nodes());
+
+        this.state.simulation.force("links", forceLink);
+        this.state.simulation.force("links").links(this.state.d3Links);
+        this.state.simulation.force("charge", d3ForceManyBody());
+        this.state.simulation.force("center", d3ForceCenter(800 / 2, 400 / 2));
+        //this.state.simulation.force("x", frx).force("y", fry);
+        //this.state.simulation.force("collide", d3ForceCollide().radius(function radius() {return 30; })).velocityDecay(0.4).force("links", d3ForceLink().id(l => l.id).distance(200)).alphaDecay(0.0228);
     }
 
     /**
@@ -243,7 +264,8 @@ export default class Graph extends React.Component {
      */
     _onDragStart = () => {
         this.isDraggingNode = true;
-        this.pauseSimulation();
+        //this.pauseSimulation();
+        this.state.simulation.alphaTarget(this.state.config.d3.alphaTarget).restart();
 
         if (this.state.enableFocusAnimation) {
             this.setState({ enableFocusAnimation: false });
@@ -492,7 +514,7 @@ export default class Graph extends React.Component {
         this.isDraggingNode = false;
         this.state = initializeGraphState(this.props, this.state);
     }
-    
+
     componentWillReceiveProps(nextProps) {
         this.UNSAFE_componentWillReceiveProps(nextProps);
     }
@@ -538,6 +560,7 @@ export default class Graph extends React.Component {
     }
 
     componentDidUpdate() {
+        console.debug("component did in fact update");
         // if the property staticGraph was activated we want to stop possible ongoing simulation
         const shouldPause = this.state.config.staticGraph || this.state.config.staticGraphWithDragAndDrop;
 

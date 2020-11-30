@@ -235,7 +235,7 @@ export default {
     staticGraphWithDragAndDrop: false,
     width: 800,
     d3: {
-        alphaTarget: 0.05,
+        alphaTarget: 0.3,
         gravity: -100,
         linkLength: 100,
         linkStrength: 1,
