@@ -104,8 +104,8 @@ export default class Node extends React.Component {
             node = null;
 
         if (this.props.svg || this.props.viewGenerator) {
-            const height = size / 10;
-            const width = size / 10;
+            const height = 2 * Math.pow(size/Math.PI, 0.5);
+            const width = 2 * Math.pow(size/Math.PI, 0.5);
             const tx = width / 2;
             const ty = height / 2;
             const transform = `translate(${tx},${ty})`;
@@ -118,14 +118,24 @@ export default class Node extends React.Component {
 
             // By default, if a view generator is set, it takes precedence over any svg image url
             if (this.props.viewGenerator && !this.props.overrideGlobalViewGenerator) {
+                let slotProps = {};
+                slotProps.d = nodeHelper.buildSvgSymbol(size, this.props.type);
+                slotProps.fill = this.props.fill;
+                slotProps.stroke = this.props.stroke;
+                slotProps.strokeWidth = this.props.strokeWidth;
+                slotProps.transform = `translate(${tx}, ${ty})`
+
                 node = (
-                    <svg {...nodeProps} width={width} height={height}>
-                        <foreignObject x="0" y="0" width="100%" height="100%">
-                            <section style={{ height, width, backgroundColor: "transparent" }}>
-                                {this.props.viewGenerator(this.props)}
-                            </section>
-                        </foreignObject>
-                    </svg>
+                    <g>
+                        <path {...slotProps} />
+                        <svg {...nodeProps} width={width} height={height}>
+                            <foreignObject x="0" y="0" width="100%" height="100%">
+                                <section style={{ height: height, width: width, backgroundColor: "transparent", transform: `scale(.6)` }}>
+                                    {this.props.viewGenerator(this.props)}
+                                </section>
+                            </foreignObject>
+                        </svg>
+                    </g>
                 );
             } else {
                 node = <image {...nodeProps} href={this.props.svg} width={width} height={height} />;
