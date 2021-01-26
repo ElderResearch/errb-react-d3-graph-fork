@@ -104,11 +104,12 @@ export default class Node extends React.Component {
             node = null;
 
         if (this.props.svg || this.props.viewGenerator) {
-            const height = 2 * Math.pow(size/Math.PI, 0.5);
-            const width = 2 * Math.pow(size/Math.PI, 0.5);
+            const radius = Math.pow(size/Math.PI, 0.5)
+            const height = 2* radius;
+            const width = 2 * radius;
             const tx = width / 2;
             const ty = height / 2;
-            const transform = `translate(${tx},${ty})`;
+            const transform = `translate(${radius + 5},${ty})`;
 
             label = (
                 <text {...textProps} transform={transform}>
