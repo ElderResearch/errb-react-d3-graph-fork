@@ -105,12 +105,13 @@ export default class Node extends React.Component {
 
         if (this.props.svg || this.props.viewGenerator) {
             const radius = Math.pow(size/Math.PI, 0.5)
-            const height = 2* radius;
+            const height = 2 * radius;
             const width = 2 * radius;
             const tx = width / 2;
             const ty = height / 2;
-            const transform = `translate(${radius + 5},${ty})`;
-
+            //these are inconsistent, I want the label to start at the top left corner before moving it so it will be consistent.
+            textProps.dx = 0;
+            const transform = `translate(${width+5},${radius})`;
             label = (
                 <text {...textProps} transform={transform}>
                     {this.props.label}
