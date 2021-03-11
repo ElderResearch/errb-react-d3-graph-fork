@@ -290,17 +290,33 @@ function _pickSourceAndTarget(o) {
 function checkForGraphElementsChanges(nextProps, currentState) {
     const nextNodes = nextProps.data.nodes.map(n => antiPick(n, NODE_PROPERTIES_DISCARD_TO_COMPARE));
     const nextLinks = nextProps.data.links;
-    const stateD3Nodes = currentState.d3Nodes.map(n => antiPick(n, NODE_PROPERTIES_DISCARD_TO_COMPARE));
-    const stateD3Links = currentState.d3Links.map(l => ({
+    /*const stateD3Nodes = currentState.d3Nodes.map(n => antiPick(n, NODE_PROPERTIES_DISCARD_TO_COMPARE));
+    const stateD3Links = currentState.d3Links;.map(l => ({
         source: getId(l.source),
         target: getId(l.target),
-    }));
-    const graphElementsUpdated = !(isDeepEqual(nextNodes, stateD3Nodes) && isDeepEqual(nextLinks, stateD3Links));
+    }));*/
+
+    // ERRB-FIX-001: fixes false positives where internal operations would seem
+    // like changes to graph elements. The comparisons below used to be against
+    // d3Nodes and d3Links, but these are mutated from the originals.
+    const cNodes = currentState.comparisonNodes;
+    const cLinks = currentState.comparisonLinks;
+
+    // ERRB-NOTE: worth noticing isDeepEqual returns success immediately if
+    // reference equality is present
+    const graphElementsUpdated = !(isDeepEqual(nextNodes, cNodes) && isDeepEqual(nextLinks, cLinks));
     const newGraphElements =
-        nextNodes.length !== stateD3Nodes.length ||
-        nextLinks.length !== stateD3Links.length ||
-        !isDeepEqual(nextNodes.map(_pickId), stateD3Nodes.map(_pickId)) ||
-        !isDeepEqual(nextLinks.map(_pickSourceAndTarget), stateD3Links.map(_pickSourceAndTarget));
+        nextNodes.length !== cNodes.length ||
+        nextLinks.length !== cLinks.length ||
+        !isDeepEqual(nextNodes.map(_pickId), cNodes.map(_pickId)) ||
+        !isDeepEqual(nextLinks.map(_pickSourceAndTarget), cLinks.map(_pickSourceAndTarget));
+
+    console.debug("graph elements updated? " + graphElementsUpdated);
+    console.debug("new graph elements? " + newGraphElements);
+    //console.debug(JSON.stringify(nextNodes));
+    //console.debug(JSON.stringify(stateD3Nodes));
+    //console.debug(JSON.stringify(nextLinks));
+    //console.debug(JSON.stringify(stateD3Links));
 
     return { graphElementsUpdated, newGraphElements };
 }

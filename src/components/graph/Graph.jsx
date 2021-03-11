@@ -513,6 +513,8 @@ export default class Graph extends React.Component {
         this.nodeClickTimer = null;
         this.isDraggingNode = false;
         this.state = initializeGraphState(this.props, this.state);
+        this.state.comparisonNodes = props.data.nodes;
+        this.state.comparisonLinks = props.data.links;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -531,8 +533,25 @@ export default class Graph extends React.Component {
      */
     // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(nextProps) {
-        const { graphElementsUpdated, newGraphElements } = checkForGraphElementsChanges(nextProps, this.state);
+        /*const*/ let { graphElementsUpdated, newGraphElements } = checkForGraphElementsChanges(nextProps, this.state);
         const state = graphElementsUpdated ? initializeGraphState(nextProps, this.state) : this.state;
+
+        // ERRB-HACK: these two are the same for now, which is what
+        // allows cosmetic changes to a graph element to render
+        // (such as node selection visuals)
+        if (graphElementsUpdated) {
+            newGraphElements = true;
+        }
+
+        let comparisonNodes = null;
+        let comparisonLinks = null;
+        if (graphElementsUpdated || newGraphElements) {
+            comparisonNodes = nextProps.data.nodes;
+            comparisonLinks = nextProps.data.links;
+        } else {
+            comparisonNodes = this.state.comparisonNodes;
+            comparisonLinks = this.state.comparisonLinks;
+        }
         const newConfig = nextProps.config || {};
         const { configUpdated, d3ConfigUpdated } = checkForGraphConfigChanges(nextProps, this.state);
         const config = configUpdated ? merge(DEFAULT_CONFIG, newConfig) : this.state.config;
@@ -556,6 +575,8 @@ export default class Graph extends React.Component {
             focusedNodeId,
             enableFocusAnimation,
             focusTransformation,
+            comparisonNodes,
+            comparisonLinks,
         });
     }
 
