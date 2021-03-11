@@ -400,6 +400,7 @@ function getId(sot) {
  * @memberof Graph/helper
  */
 function initializeGraphState({ data, id, config }, state) {
+    console.debug("initializing link graph");
     _validateGraphData(data);
 
     let graph;
@@ -420,12 +421,27 @@ function initializeGraphState({ data, id, config }, state) {
         };
     }
 
+    // ERRB-NOTE: state forks here, and links and nodes are new collections with
+    // a different reference from graph.links and graph.nodes. This matters as
+    // to what d3 is aware of and isn't.
     let newConfig = { ...merge(DEFAULT_CONFIG, config || {}) },
         links = _initializeLinks(graph.links, newConfig), // matrix of graph connections
         nodes = _tagOrphanNodes(_initializeNodes(graph.nodes), links);
+
+    // ERRB-NOTE: this assigns graph.nodes to new un-reassignable d3Nodes.
     const { nodes: d3Nodes, links: d3Links } = graph;
     const formatedId = id.replace(/ /g, "_");
-    const simulation = _createForceSimulation(newConfig.width, newConfig.height, newConfig.d3 && newConfig.d3.gravity);
+
+    // ERRB-CHANGE: this doesn't outright fix anything, but it applies the
+    // configured alphaTarget from the start and it saves work sometimes.
+    const simulation =
+        state && state.simulation
+            ? state.simulation
+            : _createForceSimulation(
+                  newConfig.width,
+                  newConfig.height,
+                  newConfig.d3 && newConfig.d3.gravity
+              ).alphaTarget(newConfig.d3.alphaTarget);
     const { minZoom, maxZoom, focusZoom } = newConfig;
 
     if (focusZoom > maxZoom) {
