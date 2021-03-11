@@ -264,8 +264,10 @@ export default class Graph extends React.Component {
      */
     _onDragStart = () => {
         this.isDraggingNode = true;
+
+        // ERRB-FIX-005: this allows for the graph to jiggle during a drag
+        this.state.simulation.alphaTarget(0.7).restart();
         //this.pauseSimulation();
-        this.state.simulation.alphaTarget(this.state.config.d3.alphaTarget).restart();
 
         if (this.state.enableFocusAnimation) {
             this.setState({ enableFocusAnimation: false });
