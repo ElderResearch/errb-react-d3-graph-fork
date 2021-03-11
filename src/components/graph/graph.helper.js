@@ -161,6 +161,14 @@ function _mergeDataLinkWithD3Link(link, index, d3Links = [], config, state = {})
             ...customProps,
         };
 
+        // ERRB-FIX-002: this breaks some features after this line but
+        // it fixes the link force when mutating graph data, which is great.
+        // Operating mechanism here: the references to nodes get re-created via
+        // identifier lookup when source and target are not objects
+        refinedD3Link.source = link.source;
+        refinedD3Link.target = link.target;
+        return refinedD3Link;
+
         // every time we toggle directed config all links should be visible again
         if (toggledDirected) {
             return { ...refinedD3Link, isHidden: false };
@@ -171,14 +179,16 @@ function _mergeDataLinkWithD3Link(link, index, d3Links = [], config, state = {})
     }
 
     const highlighted = false;
-    const source = {
+
+    // ERRB-FIX-002: other part of the link force fix
+    const source = link.source; /*{
         id: link.source,
         highlighted,
-    };
-    const target = {
+    };*/
+    const target = link.target; /*{
         id: link.target,
         highlighted,
-    };
+    };*/
 
     return {
         index,
