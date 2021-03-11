@@ -206,6 +206,7 @@ export default class Graph extends React.Component {
      * @returns {undefined}
      */
     _graphBindD3ToReactComponent() {
+        console.debug("binding to react component");
         if (!this.state.config.d3.disableLinkForce) {
             this.state.simulation.nodes(this.state.d3Nodes).on("tick", this._tick);
             this._graphLinkForceConfig();
@@ -585,7 +586,6 @@ export default class Graph extends React.Component {
     }
 
     componentDidUpdate() {
-        console.debug("component did in fact update");
         // if the property staticGraph was activated we want to stop possible ongoing simulation
         const shouldPause = this.state.config.staticGraph || this.state.config.staticGraphWithDragAndDrop;
 
