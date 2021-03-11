@@ -54,15 +54,10 @@ function _createForceSimulation(width, height, gravity) {
     const fry = d3ForceY(height / 2).strength(CONST.FORCE_Y);
     const forceStrength = gravity;
 
-    /* old
     return d3ForceSimulation()
-            .force("charge", d3ForceManyBody().strength(forceStrength))
-            .force("x", frx)
-            .force("y", fry);*/
-    return d3ForceSimulation();
-    // potentially worth trying more of
-    // .force("charge", d3ForceManyBody().strength(-30).distanceMax(5)).force("x", frx).force("y", fry);
-    // .force("collide", d3ForceCollide().radius(function radius() {return 30; })).velocityDecay(0.4).force("links", d3ForceLink().id(l => l.id).distance(200)).alphaDecay(0.0228);
+        .force("charge", d3ForceManyBody().strength(forceStrength))
+        .force("x", frx)
+        .force("y", fry);
 }
 
 /**

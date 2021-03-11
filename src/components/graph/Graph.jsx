@@ -162,24 +162,26 @@ export default class Graph extends React.Component {
      * @returns {undefined}
      */
     _graphLinkForceConfig() {
-        console.log("force configgin'");
-        console.log(this.state.d3Links);
-        const forceLink = d3ForceLink().id(l => l.id);
-        //            .distance(200);
+        const forceLink = d3ForceLink(this.state.d3Links)
+            .id(l => l.id)
+            .distance(this.state.config.d3.linkLength);
+        // ERRB-FIX-006: achieve much less spastic entry of nodes by using
+        // the default strength accessor, which is a function that "reduces
+        // the strength of links connected to heavily-connected nodes,
+        // improving stability"
+        //.strength(this.state.config.d3.linkStrength);
 
-        //        console.log(forceLink.strength());
+        this.state.simulation.force(CONST.LINK_CLASS_NAME, forceLink);
 
-        const frx = d3ForceX(800 / 2).strength(CONST.FORCE_X);
-        const fry = d3ForceY(400 / 2).strength(CONST.FORCE_Y);
-
-        console.log(this.state.simulation.nodes());
-
-        this.state.simulation.force("links", forceLink);
-        this.state.simulation.force("links").links(this.state.d3Links);
-        this.state.simulation.force("charge", d3ForceManyBody());
-        this.state.simulation.force("center", d3ForceCenter(800 / 2, 400 / 2));
-        //this.state.simulation.force("x", frx).force("y", fry);
-        //this.state.simulation.force("collide", d3ForceCollide().radius(function radius() {return 30; })).velocityDecay(0.4).force("links", d3ForceLink().id(l => l.id).distance(200)).alphaDecay(0.0228);
+        // ERRB-FIX-007: This allows for the entire graph to self-arrange when
+        // new links and nodes arrive.
+        // This re-heating needs to become conditional depending on whether
+        // the set of graph elements changed vs elements merely being modified
+        // in order to prevent the bouncy phenomenon when selecting a node
+        // or perhaps the bouncing is nice since it can sometimes work out
+        // messes by furthering the simulation a little
+        // (could also make this a smoother transition if we ever need to)
+        this.state.simulation.alpha(1).restart();
     }
 
     /**
