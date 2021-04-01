@@ -549,7 +549,9 @@ export default class Graph extends React.Component {
         }
 
         let comparisonNodes = null;
+
         let comparisonLinks = null;
+
         if (graphElementsUpdated || newGraphElements) {
             comparisonNodes = nextProps.data.nodes;
             comparisonLinks = nextProps.data.links;
