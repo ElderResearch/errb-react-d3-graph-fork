@@ -1,6 +1,6 @@
 {
   "name": "@elderresearch/errb-react-d3-graph",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0",
   "publishConfig": {
     "registry": "https://elderresearch.jfrog.io/artifactory/api/npm/npm-local/"
   },
