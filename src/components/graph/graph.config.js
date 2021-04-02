@@ -235,7 +235,13 @@ export default {
     staticGraphWithDragAndDrop: false,
     width: 800,
     d3: {
-        alphaTarget: 0.05,
+        // ERRB-FIX-004: default alphaMin is 0.001 and an alphaTarget above the
+        // minimum means the graph may never completely stop, and any such use
+        // is best being temporary before being reset to below alphaMin again.
+        // (e.g., during an animation elevate alphaTarget, then lower it after.)
+        // While alphaTarget is above alphaMin, tick is be called indefinitely,
+        // which can lead to some serious resource consumption in a browser tab.
+        alphaTarget: 0,
         gravity: -100,
         linkLength: 100,
         linkStrength: 1,
