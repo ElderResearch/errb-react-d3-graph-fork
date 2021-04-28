@@ -1,7 +1,15 @@
 import React from "react";
 
 import { drag as d3Drag } from "d3-drag";
-import { forceLink as d3ForceLink } from "d3-force";
+import {
+    forceLink as d3ForceLink,
+    forceX as d3ForceX,
+    forceY as d3ForceY,
+    forceSimulation as d3ForceSimulation,
+    forceManyBody as d3ForceManyBody,
+    forceCollide as d3ForceCollide,
+    forceCenter as d3ForceCenter,
+} from "d3-force";
 import { select as d3Select, selectAll as d3SelectAll, event as d3Event } from "d3-selection";
 import { zoom as d3Zoom } from "d3-zoom";
 
@@ -117,6 +125,7 @@ import { merge, throwErr } from "../../utils";
  *      onMouseOverLink={onMouseOverLink}
  *      onMouseOutLink={onMouseOutLink}/>
  */
+
 export default class Graph extends React.Component {
     /**
      * Obtain a set of properties which will be used to perform the focus and zoom animation if
@@ -155,10 +164,24 @@ export default class Graph extends React.Component {
     _graphLinkForceConfig() {
         const forceLink = d3ForceLink(this.state.d3Links)
             .id(l => l.id)
-            .distance(this.state.config.d3.linkLength)
-            .strength(this.state.config.d3.linkStrength);
+            .distance(this.state.config.d3.linkLength);
+        // ERRB-FIX-006: achieve much less spastic entry of nodes by using
+        // the default strength accessor, which is a function that "reduces
+        // the strength of links connected to heavily-connected nodes,
+        // improving stability"
+        //.strength(this.state.config.d3.linkStrength);
 
         this.state.simulation.force(CONST.LINK_CLASS_NAME, forceLink);
+
+        // ERRB-FIX-007: This allows for the entire graph to self-arrange when
+        // new links and nodes arrive.
+        // This re-heating needs to become conditional depending on whether
+        // the set of graph elements changed vs elements merely being modified
+        // in order to prevent the bouncy phenomenon when selecting a node
+        // or perhaps the bouncing is nice since it can sometimes work out
+        // messes by furthering the simulation a little
+        // (could also make this a smoother transition if we ever need to)
+        this.state.simulation.alpha(1).restart();
     }
 
     /**
@@ -183,6 +206,7 @@ export default class Graph extends React.Component {
      * @returns {undefined}
      */
     _graphBindD3ToReactComponent() {
+        console.debug("binding to react component");
         if (!this.state.config.d3.disableLinkForce) {
             this.state.simulation.nodes(this.state.d3Nodes).on("tick", this._tick);
             this._graphLinkForceConfig();
@@ -243,7 +267,10 @@ export default class Graph extends React.Component {
      */
     _onDragStart = () => {
         this.isDraggingNode = true;
-        this.pauseSimulation();
+
+        // ERRB-FIX-005: this allows for the graph to jiggle during a drag
+        this.state.simulation.alphaTarget(0.7).restart();
+        //this.pauseSimulation();
 
         if (this.state.enableFocusAnimation) {
             this.setState({ enableFocusAnimation: false });
@@ -491,8 +518,10 @@ export default class Graph extends React.Component {
         this.nodeClickTimer = null;
         this.isDraggingNode = false;
         this.state = initializeGraphState(this.props, this.state);
+        this.state.comparisonNodes = props.data.nodes;
+        this.state.comparisonLinks = props.data.links;
     }
-    
+
     componentWillReceiveProps(nextProps) {
         this.UNSAFE_componentWillReceiveProps(nextProps);
     }
@@ -509,8 +538,27 @@ export default class Graph extends React.Component {
      */
     // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(nextProps) {
-        const { graphElementsUpdated, newGraphElements } = checkForGraphElementsChanges(nextProps, this.state);
+        /*const*/ let { graphElementsUpdated, newGraphElements } = checkForGraphElementsChanges(nextProps, this.state);
         const state = graphElementsUpdated ? initializeGraphState(nextProps, this.state) : this.state;
+
+        // ERRB-HACK: these two are the same for now, which is what
+        // allows cosmetic changes to a graph element to render
+        // (such as node selection visuals)
+        if (graphElementsUpdated) {
+            newGraphElements = true;
+        }
+
+        let comparisonNodes = null;
+
+        let comparisonLinks = null;
+
+        if (graphElementsUpdated || newGraphElements) {
+            comparisonNodes = nextProps.data.nodes;
+            comparisonLinks = nextProps.data.links;
+        } else {
+            comparisonNodes = this.state.comparisonNodes;
+            comparisonLinks = this.state.comparisonLinks;
+        }
         const newConfig = nextProps.config || {};
         const { configUpdated, d3ConfigUpdated } = checkForGraphConfigChanges(nextProps, this.state);
         const config = configUpdated ? merge(DEFAULT_CONFIG, newConfig) : this.state.config;
@@ -534,6 +582,8 @@ export default class Graph extends React.Component {
             focusedNodeId,
             enableFocusAnimation,
             focusTransformation,
+            comparisonNodes,
+            comparisonLinks,
         });
     }
 

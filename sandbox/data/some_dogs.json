@@ -1,0 +1,431 @@
+{
+    "nodes": [
+        {
+            "id": "11{gro}",
+            "type": "groomer",
+            "name": "Wayne",
+            "properties": {
+                "name": "Wayne",
+                "id": 11,
+                "spaID": 5
+            },
+            "color": "blue",
+            "size": 2827.4333882308138,
+            "strokeColor": "none",
+            "strokeWidth": 3
+        },
+        {
+            "id": "4{dog}",
+            "type": "dog",
+            "name": "Tuesday",
+            "colorValue": 462,
+            "properties": {
+                "score": 462,
+                "name": "Tuesday",
+                "id": 4,
+                "description": "Tiny black dog",
+                "age": 17,
+                "weight": 4,
+                "size": 19,
+                "color": "#3f8"
+            },
+            "color": "#acbb00",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "5{wal}",
+            "type": "walker",
+            "name": "Bill",
+            "properties": {
+                "name": "Bill",
+                "id": 5,
+                "type": "Unidentified",
+                "hourlyRate": 12.5
+            },
+            "color": "blue",
+            "size": 2827.4333882308138,
+            "strokeColor": "none",
+            "strokeWidth": 3
+        },
+        {
+            "id": "5{spa}",
+            "type": "spa",
+            "name": "Wakefield Kennel",
+            "properties": {
+                "name": "Wakefield Kennel",
+                "id": 5,
+                "licenseNum": null
+            },
+            "color": "blue",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "6{dog}",
+            "type": "dog",
+            "name": "Barbara",
+            "colorValue": 0,
+            "properties": {
+                "score": 0,
+                "name": "Barbara",
+                "id": 6,
+                "description": "Red and black pointy ears",
+                "age": 1,
+                "weight": 110,
+                "size": 16,
+                "color": "#fcc"
+            },
+            "color": "#008000",
+            "size": 2827.4333882308138,
+            "strokeColor": "none",
+            "strokeWidth": 3
+        },
+        {
+            "id": "3{dog}",
+            "type": "dog",
+            "name": "Baloo",
+            "colorValue": 777,
+            "properties": {
+                "score": 777,
+                "name": "Baloo",
+                "id": 3,
+                "description": "Large long-haired shepherd mutt",
+                "age": 12,
+                "weight": 50,
+                "size": 21,
+                "color": "#3c3"
+            },
+            "color": "#e36500",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "2{dog}",
+            "type": "dog",
+            "name": "Vader",
+            "colorValue": 934,
+            "properties": {
+                "score": 934,
+                "name": "Vader",
+                "id": 2,
+                "description": "Large elderly black lab",
+                "age": 15,
+                "weight": 60,
+                "size": 23,
+                "color": "#9cf"
+            },
+            "color": "#f72100",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "5{dog}",
+            "type": "dog",
+            "name": "Barker",
+            "colorValue": 356,
+            "properties": {
+                "score": 356,
+                "name": "Barker",
+                "id": 5,
+                "description": "Noisy brown dog",
+                "age": 3,
+                "weight": 55,
+                "size": 15,
+                "color": "#3dd"
+            },
+            "color": "#7bad00",
+            "size": 2827.4333882308138,
+            "strokeColor": "yellow",
+            "strokeWidth": 3
+        },
+        {
+            "id": "1{dog}",
+            "type": "dog",
+            "name": "Tobias",
+            "colorValue": 110,
+            "properties": {
+                "score": 110,
+                "name": "Tobias",
+                "id": 1,
+                "description": "Small fluffy white dog",
+                "age": 5,
+                "weight": 12,
+                "size": 18,
+                "color": "#f55"
+            },
+            "color": "#1f8e00",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "1{gro}",
+            "type": "groomer",
+            "name": "Henry",
+            "properties": {
+                "name": "Henry",
+                "id": 1,
+                "spaID": 1
+            },
+            "color": "blue",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "14{gro}",
+            "type": "groomer",
+            "name": "Mike",
+            "properties": {
+                "name": "Mike",
+                "id": 14,
+                "spaID": 2
+            },
+            "color": "blue",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "15{gro}",
+            "type": "groomer",
+            "name": "Mary",
+            "properties": {
+                "name": "Mary",
+                "id": 15,
+                "spaID": 1
+            },
+            "color": "blue",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "2{cat}",
+            "type": "cat",
+            "name": "Butter",
+            "colorValue": "Butter",
+            "properties": {
+                "name": "Butter",
+                "id": 2
+            },
+            "color": "orchid",
+            "size": 2827.4333882308138,
+            "strokeColor": "none",
+            "strokeWidth": 3
+        },
+        {
+            "id": "10{dog}",
+            "type": "dog",
+            "name": "Bear",
+            "colorValue": 603,
+            "properties": {
+                "score": 603,
+                "name": "Bear",
+                "id": 10,
+                "description": "Butterscotch with very licky tongue",
+                "age": 5,
+                "weight": 40,
+                "size": 6,
+                "color": "butterscotch"
+            },
+            "color": "#cda200",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "7{dog}",
+            "type": "dog",
+            "name": "Bugsy",
+            "colorValue": 888,
+            "properties": {
+                "score": 888,
+                "name": "Bugsy",
+                "id": 7,
+                "description": "Skinny with mushed face",
+                "age": 2,
+                "weight": 36,
+                "size": 20,
+                "color": "#FF00FF"
+            },
+            "color": "#f13600",
+            "size": 2827.4333882308138
+        },
+        {
+            "id": "9{dog}",
+            "type": "dog",
+            "name": "Buster",
+            "colorValue": 765,
+            "properties": {
+                "score": 765,
+                "name": "Buster",
+                "id": 9,
+                "description": "black and white",
+                "age": 3,
+                "weight": 0,
+                "size": 5,
+                "color": "black"
+            },
+            "color": "#e16a00",
+            "size": 2827.4333882308138
+        }
+    ],
+    "links": [
+        {
+            "id": "4{dog}-{ls}->5{wal}",
+            "source": "4{dog}",
+            "target": "5{wal}",
+            "type": "likes",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "5{wal}-{ws}->4{dog}",
+            "source": "5{wal}",
+            "target": "4{dog}",
+            "type": "walks",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "4{dog}-{vs}->11{gro}",
+            "source": "4{dog}",
+            "target": "11{gro}",
+            "type": "visits",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "5{spa}-{es}->11{gro}",
+            "source": "5{spa}",
+            "target": "11{gro}",
+            "type": "employs",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "5{wal}-{ws}->2{dog}",
+            "source": "5{wal}",
+            "target": "2{dog}",
+            "type": "walks",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "5{wal}-{ws}->3{dog}",
+            "source": "5{wal}",
+            "target": "3{dog}",
+            "type": "walks",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "3{dog}-{ls}->5{wal}",
+            "source": "3{dog}",
+            "target": "5{wal}",
+            "type": "likes",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "5{wal}-{ws}->5{dog}",
+            "source": "5{wal}",
+            "target": "5{dog}",
+            "type": "walks",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "5{wal}-{ws}->1{dog}",
+            "source": "5{wal}",
+            "target": "1{dog}",
+            "type": "walks",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "1{dog}-{ls}->5{wal}",
+            "source": "1{dog}",
+            "target": "5{wal}",
+            "type": "likes",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "5{wal}-{ws}->6{dog}",
+            "source": "5{wal}",
+            "target": "6{dog}",
+            "type": "walks",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "6{dog}-{ls}->5{wal}",
+            "source": "6{dog}",
+            "target": "5{wal}",
+            "type": "likes",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "6{dog}<-{ab}->2{cat}",
+            "source": "6{dog}",
+            "target": "2{cat}",
+            "type": "are-buddies",
+            "name": "[unnamed]",
+            "properties": {
+                "dog_name": "Barbara",
+                "cat_name": "Butter",
+                "relationship_descriptor": "doting"
+            }
+        },
+        {
+            "id": "6{dog}-{vs}->1{gro}",
+            "source": "6{dog}",
+            "target": "1{gro}",
+            "type": "visits",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "6{dog}-{vs}->15{gro}",
+            "source": "6{dog}",
+            "target": "15{gro}",
+            "type": "visits",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "6{dog}-{vs}->14{gro}",
+            "source": "6{dog}",
+            "target": "14{gro}",
+            "type": "visits",
+            "name": "[unnamed]",
+            "properties": {}
+        },
+        {
+            "id": "10{dog}<-{ab}->2{cat}",
+            "source": "10{dog}",
+            "target": "2{cat}",
+            "type": "are-buddies",
+            "name": "[unnamed]",
+            "properties": {
+                "dog_name": "Bear",
+                "cat_name": "Butter",
+                "relationship_descriptor": "sizzling"
+            }
+        },
+        {
+            "id": "7{dog}<-{ab}->2{cat}",
+            "source": "7{dog}",
+            "target": "2{cat}",
+            "type": "are-buddies",
+            "name": "[unnamed]",
+            "properties": {
+                "dog_name": "Bugsy",
+                "cat_name": "Butter",
+                "relationship_descriptor": "animated"
+            }
+        },
+        {
+            "id": "9{dog}<-{ab}->2{cat}",
+            "source": "9{dog}",
+            "target": "2{cat}",
+            "type": "are-buddies",
+            "name": "[unnamed]",
+            "properties": {
+                "dog_name": "Buster",
+                "cat_name": "Butter",
+                "relationship_descriptor": "smooth"
+            }
+        }
+    ]
+}

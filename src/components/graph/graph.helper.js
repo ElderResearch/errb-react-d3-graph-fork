@@ -24,6 +24,8 @@ import {
     forceY as d3ForceY,
     forceSimulation as d3ForceSimulation,
     forceManyBody as d3ForceManyBody,
+    forceCollide as d3ForceCollide,
+    forceCenter as d3ForceCenter,
 } from "d3-force";
 
 import CONST from "./graph.const";
@@ -154,6 +156,14 @@ function _mergeDataLinkWithD3Link(link, index, d3Links = [], config, state = {})
             ...customProps,
         };
 
+        // ERRB-FIX-002: this breaks some features after this line but
+        // it fixes the link force when mutating graph data, which is great.
+        // Operating mechanism here: the references to nodes get re-created via
+        // identifier lookup when source and target are not objects
+        refinedD3Link.source = link.source;
+        refinedD3Link.target = link.target;
+        return refinedD3Link;
+
         // every time we toggle directed config all links should be visible again
         if (toggledDirected) {
             return { ...refinedD3Link, isHidden: false };
@@ -164,14 +174,16 @@ function _mergeDataLinkWithD3Link(link, index, d3Links = [], config, state = {})
     }
 
     const highlighted = false;
-    const source = {
+
+    // ERRB-FIX-002: other part of the link force fix
+    const source = link.source; /*{
         id: link.source,
         highlighted,
-    };
-    const target = {
+    };*/
+    const target = link.target; /*{
         id: link.target,
         highlighted,
-    };
+    };*/
 
     return {
         index,
@@ -283,17 +295,33 @@ function _pickSourceAndTarget(o) {
 function checkForGraphElementsChanges(nextProps, currentState) {
     const nextNodes = nextProps.data.nodes.map(n => antiPick(n, NODE_PROPERTIES_DISCARD_TO_COMPARE));
     const nextLinks = nextProps.data.links;
-    const stateD3Nodes = currentState.d3Nodes.map(n => antiPick(n, NODE_PROPERTIES_DISCARD_TO_COMPARE));
-    const stateD3Links = currentState.d3Links.map(l => ({
+    /*const stateD3Nodes = currentState.d3Nodes.map(n => antiPick(n, NODE_PROPERTIES_DISCARD_TO_COMPARE));
+    const stateD3Links = currentState.d3Links;.map(l => ({
         source: getId(l.source),
         target: getId(l.target),
-    }));
-    const graphElementsUpdated = !(isDeepEqual(nextNodes, stateD3Nodes) && isDeepEqual(nextLinks, stateD3Links));
+    }));*/
+
+    // ERRB-FIX-001: fixes false positives where internal operations would seem
+    // like changes to graph elements. The comparisons below used to be against
+    // d3Nodes and d3Links, but these are mutated from the originals.
+    const cNodes = currentState.comparisonNodes;
+    const cLinks = currentState.comparisonLinks;
+
+    // ERRB-NOTE: worth noticing isDeepEqual returns success immediately if
+    // reference equality is present
+    const graphElementsUpdated = !(isDeepEqual(nextNodes, cNodes) && isDeepEqual(nextLinks, cLinks));
     const newGraphElements =
-        nextNodes.length !== stateD3Nodes.length ||
-        nextLinks.length !== stateD3Links.length ||
-        !isDeepEqual(nextNodes.map(_pickId), stateD3Nodes.map(_pickId)) ||
-        !isDeepEqual(nextLinks.map(_pickSourceAndTarget), stateD3Links.map(_pickSourceAndTarget));
+        nextNodes.length !== cNodes.length ||
+        nextLinks.length !== cLinks.length ||
+        !isDeepEqual(nextNodes.map(_pickId), cNodes.map(_pickId)) ||
+        !isDeepEqual(nextLinks.map(_pickSourceAndTarget), cLinks.map(_pickSourceAndTarget));
+
+    console.debug("graph elements updated? " + graphElementsUpdated);
+    console.debug("new graph elements? " + newGraphElements);
+    //console.debug(JSON.stringify(nextNodes));
+    //console.debug(JSON.stringify(stateD3Nodes));
+    //console.debug(JSON.stringify(nextLinks));
+    //console.debug(JSON.stringify(stateD3Links));
 
     return { graphElementsUpdated, newGraphElements };
 }
@@ -367,6 +395,7 @@ function getId(sot) {
  * @memberof Graph/helper
  */
 function initializeGraphState({ data, id, config }, state) {
+    console.debug("initializing link graph");
     _validateGraphData(data);
 
     let graph;
@@ -387,12 +416,27 @@ function initializeGraphState({ data, id, config }, state) {
         };
     }
 
+    // ERRB-NOTE: state forks here, and links and nodes are new collections with
+    // a different reference from graph.links and graph.nodes. This matters as
+    // to what d3 is aware of and isn't.
     let newConfig = { ...merge(DEFAULT_CONFIG, config || {}) },
         links = _initializeLinks(graph.links, newConfig), // matrix of graph connections
         nodes = _tagOrphanNodes(_initializeNodes(graph.nodes), links);
+
+    // ERRB-NOTE: this assigns graph.nodes to new un-reassignable d3Nodes.
     const { nodes: d3Nodes, links: d3Links } = graph;
     const formatedId = id.replace(/ /g, "_");
-    const simulation = _createForceSimulation(newConfig.width, newConfig.height, newConfig.d3 && newConfig.d3.gravity);
+
+    // ERRB-CHANGE: this doesn't outright fix anything, but it applies the
+    // configured alphaTarget from the start and it saves work sometimes.
+    const simulation =
+        state && state.simulation
+            ? state.simulation
+            : _createForceSimulation(
+                  newConfig.width,
+                  newConfig.height,
+                  newConfig.d3 && newConfig.d3.gravity
+              ).alphaTarget(newConfig.d3.alphaTarget);
     const { minZoom, maxZoom, focusZoom } = newConfig;
 
     if (focusZoom > maxZoom) {
